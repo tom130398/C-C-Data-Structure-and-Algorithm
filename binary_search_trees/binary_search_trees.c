@@ -40,6 +40,23 @@ void insert(int key)
 		r->rchild = p;
 }
 
+struct Node *rInsert(struct Node *p, int key)
+{
+	struct Node *t = NULL;
+	if(p == NULL)
+	{
+		t = (struct Node *)malloc(sizeof(struct Node));
+		t->data = key;
+		t->lchild = t->rchild = NULL;
+		return t;
+	}
+	if(key < p->data)
+		p->lchild = rInsert(p->lchild, key);
+	else if(key > p->data)
+		p->rchild = rInsert(p->rchild, key);
+	return p;
+}
+
 void inorder(struct Node *p)
 {
 	if(p)
@@ -67,7 +84,7 @@ struct Node *search(int key)
 
 int main()
 {
-	insert(10);
+	root = rInsert(root,10);
 	insert(5);
 	insert(20);
 	insert(8);
