@@ -82,12 +82,71 @@ struct Node *search(int key)
 	return NULL;
 }
 
+int height(struct Node *p)
+{
+	int x, y;
+	if(p == NULL)
+		return 0;
+	x = height(p->lchild);
+	y = height(p->rchild);
+	return x > y ? x+1 : y+1;
+}
+
+struct Node *inpre(struct Node *p)
+{
+	while(p && p->rchild != NULL)
+		p = p->rchild;
+	return p;
+}
+
+struct Node *insuc(struct Node *p)
+{
+		while(p && p->lchild != NULL)
+				p = p->lchild;
+		return p;
+}
+
+struct Node *Delete(struct Node *p, int key)
+{
+	struct Node *q;
+
+	if(p == NULL)
+		return NULL;
+	if(p->lchild == NULL && p->rchild == NULL)
+	{
+		if(p == root)
+			root == NULL;
+		free(p);
+		return NULL;
+	}
+	if(key < p->data)
+		p->lchild = Delete(p->lchild, key);
+	else if(key > p->data)
+		p->rchild = Delete(p->rchild, key);
+	else
+	{
+		if(height(p->lchild) > height(p->rchild))
+		{
+			q = inpre(p->lchild);
+			p->data = q->data;
+			p->lchild = Delete(p->lchild, q->data);
+		}
+		else
+		{
+						q = insuc(p->rchild);
+						p->data = q->data;
+						p->rchild = Delete(p->rchild, q->data);
+		}
+	}
+	return p;
+}
+
 int main()
 {
-	root = rInsert(root,10);
-	insert(5);
+	root = rInsert(root,50);
+	insert(10);
+	insert(40);
 	insert(20);
-	insert(8);
 	insert(30);
 	inorder(root);
 	printf("\n");
@@ -96,4 +155,7 @@ int main()
 		printf("%d is found\n", temp->data);
 	else
 		printf("Cannot find given key\n");
+	Delete(root, 50);
+	inorder(root);
+	printf("\n");
 }
