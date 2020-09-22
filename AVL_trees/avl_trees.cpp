@@ -119,7 +119,23 @@ Node* AVL::LRRotation(Node *p)
 
 Node* AVL::RLRotation(Node *p)
 {
-	return nullptr;
+	Node *pr = p->rchild;
+	Node *prl = pr->lchild;
+
+	pr->lchild = prl->rchild;
+	p->rchild = prl->lchild;
+
+	prl->rchild = pr;
+	prl->lchild = p;
+
+	p->height = nodeheight(p);
+	pr->height = nodeheight(pr);
+	prl->height = nodeheight(prl);
+
+	if(root == p)
+		root = prl;
+
+	return prl;
 }
 
 Node* AVL::rInsert(Node *p, int key)

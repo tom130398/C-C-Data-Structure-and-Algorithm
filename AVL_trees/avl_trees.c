@@ -92,16 +92,23 @@ struct Node *RRRotation(struct Node *p)
 
 struct Node *RLRotation(struct Node *p)
 {
-	/*struct Node *pl = p->lchild;
-	struct Node *plr = pl->rchild;
-	pl->rchild = p;
-	p->lchild = plr;
+	struct Node *pr = p->rchild;
+	struct Node *prl = pr->lchild;
+
+	pr->lchild = prl->rchild;
+	p->rchild = prl->lchild;
+
+	prl->rchild = pr;
+	prl->lchild = p;
+
 	p->height = nodeheight(p);
-	pl->height = nodeheight(pl);
+	pr->height = nodeheight(pr);
+	prl->height = nodeheight(prl);
+
 	if(root == p)
-		root = pl;
-	return pl;*/
-	return NULL;
+		root = prl;
+
+	return prl;
 }
 
 struct Node *rInsert(struct Node *p, int key)
