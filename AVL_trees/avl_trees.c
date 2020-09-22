@@ -12,16 +12,20 @@ struct Node
 int nodeheight(struct Node *p)
 {
 	int hl, hr;
+
 	hl = p && p->lchild ? p->lchild->height : 0;
 	hr = p && p->rchild ? p->rchild->height : 0;
+
 	return hl > hr ? hl + 1 : hr + 1;
 }
 
 int balanceFactor(struct Node *p)
 {
 	int hl, hr;
+
 	hl = p && p->lchild ? p->lchild->height : 0;
 	hr = p && p->rchild ? p->rchild->height : 0;
+
 	return hl - hr;
 }
 
@@ -29,6 +33,7 @@ struct Node *LLRotation(struct Node *p)
 {
 	struct Node *pl = p->lchild;
 	struct Node *plr = pl->rchild;
+
 	pl->rchild = p;
 	p->lchild = plr;
 
@@ -39,21 +44,31 @@ struct Node *LLRotation(struct Node *p)
 	//update root
 	if(root == p)
 		root = pl;
+
 	return pl;
 }
 
 struct Node *LRRotation(struct Node *p)
 {
-	/*struct Node *pl = p->lchild;
+	struct Node *pl = p->lchild;
 	struct Node *plr = pl->rchild;
-	pl->rchild = p;
-	p->lchild = plr;
-	p->height = nodeheight(p);
+
+	pl->rchild = plr->lchild;
+	p->lchild = plr->rchild;
+	
+	plr->lchild = pl;
+	plr->rchild = p;
+
+	//update height
 	pl->height = nodeheight(pl);
+	p->height = nodeheight(p);
+	plr->height = nodeheight(plr);
+	
+	//update root
 	if(root == p)
-		root = pl;
-	return pl;*/
-	return NULL;
+		root = plr;
+	
+	return plr;
 }
 
 struct Node *RRRotation(struct Node *p)
