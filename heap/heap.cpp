@@ -17,6 +17,12 @@ void insert(vector<int>& v, int key)
 	v[i] = key;
 }
 
+void createHeap(vector<int>& v, int a[], int n)
+{
+	for(int i = 0; i < n; i++)
+		insert(v, a[i]);
+}
+
 template <class T>
 void print(T& v, int n)
 {
@@ -37,5 +43,11 @@ int main()
 	v.reserve(15);	//reserve space for 15 elements
 	insert(v, 50);
 	print(v, v.size());
+
+	cout << "Create Heap" << endl;
+	vector<int> vec;
+	int a[] = {10, 20, 30, 25, 5, 40, 35};
+	createHeap(vec, a, sizeof(a)/sizeof(a[0]));
+	print(vec, vec.size());
 	return 0;
 }
