@@ -2,31 +2,68 @@
 #include <vector>
 using namespace std;
 
-void insert(vector<int>& v, int key)
+void swap(int A[], int i, int j)
 {
-	//insert key at the end
-	auto i = v.size();
-	v.emplace_back(key);
+	int temp = A[i];
+	A[i] = A[j];
+	A[j] = temp;
+}
 
-	//rearrange elements
-	while(i > 0 && key > v[i % 2 == 0 ? (i/2)-1 : i/2])
+int Delete(int A[], int n)
+{
+	int x = A[0];  // Max element
+	A[0] = A[n-1];
+
+	int i = 0;
+	int j = 2 * i + 1;
+
+	while (j < n-1)
 	{
-		v[i] = v[i % 2 == 0 ? (i/2)-1 : i/2];
-		i = i % 2 == 0 ? (i/2)-1 : i/2;
+		// Compare left and right children
+		if (A[j] < A[j+1])
+			j = j+1;
+
+		// Compare parent and largest child
+		if (A[i] < A[j])
+		{
+			swap(A, i, j);
+			i = j;
+			j = 2 * i + 1;
+		}
+		else
+			break;
 	}
-	v[i] = key;
+	return x;
+}
+ 
+void Heapify(int A[], int n)
+{
+	// # of leaf elements: (n+1)/2, index of last leaf element's parent = (n/2)-1
+	for (int i=(n/2)-1; i>=0; i--)
+	{
+		int j = 2 * i + 1;  // Left child for current i
+		while(j < n-1)
+		{
+			// Compare left and right children of current i
+			if (A[j] < A[j+1])
+				j = j+1;
+			// Compare parent and largest child
+			if (A[i] < A[j])
+			{
+				swap(A, i, j);
+				i = j;
+				j = 2 * i + 1;
+			}
+			else
+				break;
+		}
+	}
 }
 
-void createHeap(vector<int>& v, int a[], int n)
+template <class T> 
+void print(T& v, int n, string s)
 {
-	for(int i = 0; i < n; i++)
-		insert(v, a[i]);
-}
-
-template <class T>
-void print(T& v, int n)
-{
-	cout << "Max Heap: [" << flush;
+	cout << s << ": [" << flush;
 	for(int i = 0; i < n; i++)
 	{
 		cout << v[i] << flush;
@@ -38,16 +75,18 @@ void print(T& v, int n)
 
 int main()
 {
-	vector<int> v = {45, 35, 15, 30, 10, 12, 6, 5, 20};
-	print(v, v.size());
-	v.reserve(15);	//reserve space for 15 elements
-	insert(v, 50);
-	print(v, v.size());
+	int A[] = {5, 10, 30, 20, 35, 40, 15};
+	print(A, sizeof(A)/sizeof(A[0]), "A");
 
-	cout << "Create Heap" << endl;
-	vector<int> vec;
-	int a[] = {10, 20, 30, 25, 5, 40, 35};
-	createHeap(vec, a, sizeof(a)/sizeof(a[0]));
-	print(vec, vec.size());
+	Heapify(A, sizeof(A)/sizeof(A[0]));
+	print(A, sizeof(A)/sizeof(A[0]), "Heapified A");
+	cout << endl;
+
+	int B[] = {5, 10, 30, 20};
+	print(B, sizeof(B)/sizeof(B[0]), "B");
+
+	Heapify(B, sizeof(B)/sizeof(B[0]));
+	print(B, sizeof(B)/sizeof(B[0]), "Heapified B");
+
 	return 0;
 }
