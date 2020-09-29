@@ -51,6 +51,19 @@ void iterativeMergeSort(int a[], int n)
 		merge(a, 0, p/2 - 1, n - 1);
 }
 
+void recursiveMergeSort(int a[], int low, int high)
+{
+	if(low < high)
+	{
+		int mid = (high - low)/2 + low;
+		//sort sub-lists
+		recursiveMergeSort(a, low, mid);
+		recursiveMergeSort(a, mid+1, high);
+		//merge sorted sub-lists
+		merge(a, low, mid, high);
+	}
+}
+
 int main()
 {
 	int a[] = {2,5,1,6,4,9,7,3,8,0};
@@ -58,4 +71,10 @@ int main()
 	Print(a, n, "\t\tA");
 	iterativeMergeSort(a, n);
 	Print(a, n, "Sorted");
+
+	int b[] = {10,14,16,11,17,13,19,18,12,15};
+	int m = sizeof(b)/sizeof(b[0]);
+	Print(b, m, "\t\tB");
+	recursiveMergeSort(b, 0, m-1);
+	Print(b, n, "Sorted");
 }
